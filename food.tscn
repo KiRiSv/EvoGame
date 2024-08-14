@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://b2vfo74q8poy1"]
+
+[ext_resource type="Texture2D" uid="uid://bbngu5pxeyib" path="res://grass.png" id="1_hoyb5"]
+
+[node name="Food" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, 4.76837e-07)
+scale = Vector2(0.174686, 0.223822)
+texture = ExtResource("1_hoyb5")
