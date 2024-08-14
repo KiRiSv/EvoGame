@@ -25,7 +25,7 @@ offset_bottom = 33.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Button" type="Button" parent="GridContainer"]
+[node name="Start" type="Button" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 42
