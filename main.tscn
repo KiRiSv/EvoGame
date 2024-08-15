@@ -70,3 +70,7 @@ texture_normal = ExtResource("5_f3hs3")
 texture_pressed = ExtResource("8_1yu4j")
 ignore_texture_size = true
 stretch_mode = 0
+
+[connection signal="toggled" from="SideMenu/VBoxContainer/SpawnPrey" to="." method="ToggleCreature" binds= [1]]
+[connection signal="toggled" from="SideMenu/VBoxContainer/SpawnPredator" to="." method="ToggleCreature" binds= [2]]
+[connection signal="toggled" from="SideMenu/VBoxContainer/SpawnGrass" to="." method="ToggleCreature" binds= [3]]

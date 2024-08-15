@@ -2,7 +2,7 @@ using Godot;
 using System;
 using static MLtest;
 
-public partial class Prey : Node
+public partial class Prey : Node2D
 {
 	static int layerSize = 10;
 	static int inputSize = 10;

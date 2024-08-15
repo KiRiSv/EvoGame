@@ -6,12 +6,16 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wu5ny"]
 size = Vector2(18, 18)
 
-[node name="RigidBody2D" type="RigidBody2D"]
+[node name="Node2D" type="Node2D"]
 script = ExtResource("1_44y3n")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+collision_mask = 2
+gravity_scale = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
 shape = SubResource("RectangleShape2D_wu5ny")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
 scale = Vector2(0.0400056, 0.0400056)
 texture = ExtResource("1_82ld7")
