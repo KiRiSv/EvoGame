@@ -30,8 +30,8 @@ public partial class MLtest : Node
 		return maxInd(outCellSums);
 	}
 	public static double[,] mutate(double[,] arr){
-		int i = GD.Randi() % arr.GetLength(0);
-		int j = GD.Randi() % arr.GetLength(1);
+		long i = GD.Randi() % arr.GetLength(0);
+		long j = GD.Randi() % arr.GetLength(1);
 		arr[i,j] = GD.RandRange(-1,1);
 		return arr;
 	}

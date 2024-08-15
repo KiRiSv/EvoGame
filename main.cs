@@ -6,9 +6,10 @@ public partial class main : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		
 	}
 
- 
+ 	static PackedScene PreyScene = GD.Load<PackedScene>("res://prey.tscn");
 	
 	static bool mouse_down = false;
 	static Vector2 last_placement = new Vector2(0,0);
@@ -28,7 +29,9 @@ public partial class main : Node2D
 	{
 		if(mouse_down & (GetViewport().GetMousePosition().DistanceTo(last_placement) > 50)){
 			last_placement = GetViewport().GetMousePosition();
-			GD.Print("Boop");
+			var preyInstance = main.PreyScene.Instantiate();
+			preyInstance.Position = last_placement;
+			AddChild(preyInstance);
 		}
 	}
 }

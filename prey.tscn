@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://dkpgssfexsr2f"]
+[gd_scene load_steps=4 format=3 uid="uid://dkpgssfexsr2f"]
 
+[ext_resource type="Script" path="res://Prey.cs" id="1_44y3n"]
 [ext_resource type="Texture2D" uid="uid://1blyi1pfbel6" path="res://pngs/prey coded.png" id="1_82ld7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wu5ny"]
 size = Vector2(18, 18)
 
 [node name="RigidBody2D" type="RigidBody2D"]
+script = ExtResource("1_44y3n")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_wu5ny")
