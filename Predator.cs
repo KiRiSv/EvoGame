@@ -2,7 +2,7 @@ using Godot;
 using System;
 using static MLtest;
 
-public partial class Prey : Creature
+public partial class Predator : Creature
 {
 	static int layerSize = 10;
 	static int inputSize = 10;
@@ -12,13 +12,4 @@ public partial class Prey : Creature
 	double[,] hiddenLayer = new double[layerSize,inputSize];
 	double[,] output = new double[outSize,layerSize];
 	
-	private void _on_body_entered(Node body)
-	{
-		if(body is Food){
-			body.CallDeferred("queue_free");
-			this.clone();
-		}
-	}
 }
-
-
