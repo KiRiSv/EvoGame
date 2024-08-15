@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkoxlgf7icwd0"]
+
+[ext_resource type="Texture2D" uid="uid://den3pok28vqkr" path="res://pngs/predator.png" id="1_ii7yj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kglvw"]
+size = Vector2(0.184466, 0.262051)
+
+[node name="RigidBody2D" type="RigidBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+scale = Vector2(162.631, -99.2174)
+shape = SubResource("RectangleShape2D_kglvw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.0804632, 0.0800013)
+texture = ExtResource("1_ii7yj")

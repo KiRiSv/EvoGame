@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b2vfo74q8poy1"]
 
-[ext_resource type="Texture2D" uid="uid://bbngu5pxeyib" path="res://grass.png" id="1_hoyb5"]
+[ext_resource type="Texture2D" uid="uid://bt7sxauefnd4j" path="res://pngs/grass.png" id="1_hoyb5"]
 
 [node name="Food" type="Node2D"]
 
