@@ -16,6 +16,7 @@ public partial class main : Node2D
 	static bool mouse_down = false;
 	static Vector2 last_placement = new Vector2(0,0);
 	static int selectedButton = 0;
+	static bool mouseInBox = false;
 	
 	private void ToggleCreature (bool toggledOn, int creatureID){
 		if(toggledOn){
@@ -25,6 +26,18 @@ public partial class main : Node2D
 			selectedButton = 0;
 		}
 	}
+	
+	private void _on_v_box_container_mouse_entered()
+	{
+		main.mouseInBox = true;
+	}
+
+
+	private void _on_v_box_container_mouse_exited()
+	{
+		main.mouseInBox = false;
+	}
+
 	
 	public override void _Input(InputEvent @event)
 	{
@@ -40,7 +53,9 @@ public partial class main : Node2D
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if(mouse_down & (GetViewport().GetMousePosition().DistanceTo(last_placement) > 1)){
+		if(mouse_down == true& 
+			(GetViewport().GetMousePosition().DistanceTo(last_placement) > 1) &
+			main.mouseInBox == false){
 			last_placement = GetViewport().GetMousePosition();
 			//TextureButton preyButton = GetNode<TextureButton>("SideMenu/VBoxContainer/SpawnPrey");
 			if (selectedButton==1){
