@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://main.cs" id="1_h77h5"]
 [ext_resource type="Texture2D" uid="uid://c3g40cr47ev65" path="res://pngs/predator_menu.PNG" id="1_riq3s"]
 [ext_resource type="Texture2D" uid="uid://di2o2gstdy8tf" path="res://pngs/predator_menu_pressed.png" id="2_ad0g4"]
-[ext_resource type="ButtonGroup" uid="uid://c5vheuw726w2y" path="res://button_group.tres" id="2_fa68y"]
+[ext_resource type="ButtonGroup" uid="uid://crqdt6ygnu4et" path="res://button_group.tres" id="2_fa68y"]
 [ext_resource type="Texture2D" uid="uid://cad8pvfq4u31e" path="res://pngs/prey_menu.PNG" id="3_rne2b"]
 [ext_resource type="Texture2D" uid="uid://s7dmo0dp1c1l" path="res://pngs/prey_menu_pressed.png" id="4_1rlk4"]
 [ext_resource type="Texture2D" uid="uid://bt7sxauefnd4j" path="res://pngs/grass.png" id="5_f3hs3"]

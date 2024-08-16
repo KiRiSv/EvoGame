@@ -12,4 +12,16 @@ public partial class Predator : Creature
 	double[,] hiddenLayer = new double[layerSize,inputSize];
 	double[,] output = new double[outSize,layerSize];
 	
+	private void _on_body_entered(Node body)
+	{
+		if(body is Prey){
+			body.CallDeferred("queue_free");
+			PackedScene predatorScene = GD.Load<PackedScene>("res://predator.tscn");
+			Predator predatorInstance = (Predator) predatorScene.Instantiate();
+			predatorInstance.clone(this);
+			AddChild(predatorInstance);
+		}
+	}
 }
+
+

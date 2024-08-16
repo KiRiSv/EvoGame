@@ -11,20 +11,22 @@ public partial class Creature : RigidBody2D
 	static int mutatetionChance = 10;
 	double[,] hiddenLayer = new double[layerSize,inputSize];
 	double[,] output = new double[outSize,layerSize];
-	public Creature clone(){
-		Creature clone = new Creature(hiddenLayer, output);
+	public void clone(Creature parent){
+		hiddenLayer = parent.hiddenLayer;
+		output = parent.output;
 		if(GD.Randi() % 100 == mutatetionChance){
 			hiddenLayer = MLtest.mutate(hiddenLayer);
 		}
 		if(GD.Randi() % 100 == mutatetionChance){
 			output = MLtest.mutate(output);
 		}
-		return clone;
 	}
 	public Creature(){
 		hiddenLayer = MLtest.setRandom(hiddenLayer);
-		LinearVelocity = new Vector2(speed,0);
 		output = MLtest.setRandom(output);
+		LinearVelocity = new Vector2(speed,0);
+		ContactMonitor = true;
+		this.MaxContactsReported = 10;
 	}
 	public Creature(double[,] inheritedHiddenLayer, double[,] inheritedOutput){
 		hiddenLayer = inheritedHiddenLayer;

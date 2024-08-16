@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wu5ny"]
 size = Vector2(18, 18)
 
-[node name="RigidBody2D" type="RigidBody2D"]
+[node name="Prey" type="RigidBody2D"]
 gravity_scale = 0.0
 script = ExtResource("1_44y3n")
 

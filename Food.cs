@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 
-public partial class Food : Sprite2D
+public partial class Food : RigidBody2D
 {
 	public Food(){
 		//position = new Vector2(GD.Randf()*10,GD.Randf()*10);

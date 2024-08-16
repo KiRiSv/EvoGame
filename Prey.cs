@@ -14,9 +14,13 @@ public partial class Prey : Creature
 	
 	private void _on_body_entered(Node body)
 	{
+		//GD.Print(body.GetType());
 		if(body is Food){
 			body.CallDeferred("queue_free");
-			this.clone();
+			PackedScene preyScene = GD.Load<PackedScene>("res://prey.tscn");
+			Prey preyInstance = (Prey) preyScene.Instantiate();
+			preyInstance.clone(this);
+			AddChild(preyInstance);
 		}
 	}
 }
