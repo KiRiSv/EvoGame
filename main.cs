@@ -54,9 +54,9 @@ public partial class main : Node2D
 	public override void _Process(double delta)
 	{
 		if(mouse_down == true& 
-			(GetViewport().GetMousePosition().DistanceTo(last_placement) > 1) &
+			(GetGlobalMousePosition().DistanceTo(last_placement) > 1) &
 			main.mouseInBox == false){
-			last_placement = GetViewport().GetMousePosition();
+			last_placement = GetGlobalMousePosition();
 			//TextureButton preyButton = GetNode<TextureButton>("SideMenu/VBoxContainer/SpawnPrey");
 			if (selectedButton==1){
 				Node2D preyInstance = (Node2D) main.preyScene.Instantiate();
