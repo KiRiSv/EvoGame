@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://1766wymajcs"]
+[gd_scene load_steps=4 format=3 uid="uid://dkoxlgf7icwd0"]
 
 [ext_resource type="Texture2D" uid="uid://den3pok28vqkr" path="res://pngs/predator.png" id="1_ii7yj"]
 [ext_resource type="Script" path="res://Predator.cs" id="1_iygci"]
@@ -7,6 +7,7 @@
 size = Vector2(0.184466, 0.262051)
 
 [node name="Predator" type="RigidBody2D"]
+collision_layer = 2
 gravity_scale = 0.0
 script = ExtResource("1_iygci")
 

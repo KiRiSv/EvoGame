@@ -6,7 +6,8 @@ var zoomTarget: Vector2
 var dragStartMousePos = Vector2.ZERO
 var dragStartCameraPos = Vector2.ZERO
 var isDragging : bool = false
-
+var zoom_min: Vector2 = Vector2(0.1, 0.1)
+var zoom_max: Vector2 = Vector2(5.0, 5.0)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -28,6 +29,7 @@ func Zoom(delta):
 	if Input.is_action_just_pressed("cam_zoom_out"):
 		zoomTarget *= 0.8
 	
+	zoomTarget = clamp(zoomTarget,zoom_min,zoom_max)
 	zoom = zoom.slerp(zoomTarget, zoomSpeed * delta)
 	
 	pass
