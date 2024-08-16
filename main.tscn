@@ -30,8 +30,8 @@ custom_minimum_size = Vector2(10, 10)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 1756.0
-offset_top = -301.0
+offset_left = 1750.0
+offset_top = -303.0
 offset_right = 1881.0
 offset_bottom = -30.0
 grow_vertical = 0
@@ -71,6 +71,18 @@ texture_pressed = ExtResource("8_1yu4j")
 ignore_texture_size = true
 stretch_mode = 0
 
+[connection signal="mouse_entered" from="SideMenu/Panel" to="." method="_on_v_box_container_mouse_entered"]
+[connection signal="mouse_exited" from="SideMenu/Panel" to="." method="_on_v_box_container_mouse_exited"]
+[connection signal="mouse_entered" from="SideMenu/VBoxContainer" to="." method="_on_v_box_container_mouse_entered"]
+[connection signal="mouse_exited" from="SideMenu/VBoxContainer" to="." method="_on_v_box_container_mouse_exited"]
+[connection signal="mouse_entered" from="SideMenu/VBoxContainer/RichTextLabel" to="." method="_on_v_box_container_mouse_entered"]
+[connection signal="mouse_exited" from="SideMenu/VBoxContainer/RichTextLabel" to="." method="_on_v_box_container_mouse_exited"]
+[connection signal="mouse_entered" from="SideMenu/VBoxContainer/SpawnPrey" to="." method="_on_v_box_container_mouse_entered"]
+[connection signal="mouse_exited" from="SideMenu/VBoxContainer/SpawnPrey" to="." method="_on_v_box_container_mouse_exited"]
 [connection signal="toggled" from="SideMenu/VBoxContainer/SpawnPrey" to="." method="ToggleCreature" binds= [1]]
+[connection signal="mouse_entered" from="SideMenu/VBoxContainer/SpawnPredator" to="." method="_on_v_box_container_mouse_entered"]
+[connection signal="mouse_exited" from="SideMenu/VBoxContainer/SpawnPredator" to="." method="_on_v_box_container_mouse_exited"]
 [connection signal="toggled" from="SideMenu/VBoxContainer/SpawnPredator" to="." method="ToggleCreature" binds= [2]]
+[connection signal="mouse_entered" from="SideMenu/VBoxContainer/SpawnGrass" to="." method="_on_v_box_container_mouse_entered"]
+[connection signal="mouse_exited" from="SideMenu/VBoxContainer/SpawnGrass" to="." method="_on_v_box_container_mouse_exited"]
 [connection signal="toggled" from="SideMenu/VBoxContainer/SpawnGrass" to="." method="ToggleCreature" binds= [3]]
