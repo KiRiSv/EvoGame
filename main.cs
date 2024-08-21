@@ -59,12 +59,14 @@ public partial class main : Node2D
 			last_placement = GetGlobalMousePosition();
 			//TextureButton preyButton = GetNode<TextureButton>("SideMenu/VBoxContainer/SpawnPrey");
 			if (selectedButton==1){
-				Node2D preyInstance = (Node2D) main.preyScene.Instantiate();
+				Prey preyInstance = (Prey) main.preyScene.Instantiate();
 				preyInstance.Position = last_placement;
+				preyInstance.initialize();
 				AddChild(preyInstance);
 			}	
 			else if (selectedButton==2){
-				Node2D predatorInstance = (Node2D) main.predatorScene.Instantiate();
+				Predator predatorInstance = (Predator) main.predatorScene.Instantiate();
+				predatorInstance.initialize();
 				predatorInstance.Position = last_placement;
 				AddChild(predatorInstance);
 			}
