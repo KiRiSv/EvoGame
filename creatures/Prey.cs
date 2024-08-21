@@ -5,14 +5,13 @@ using static MLtest;
 public partial class Prey : Creature
 {
 	public override float fov {get;set;} = 1.75F;
-	static PackedScene preyScene = GD.Load<PackedScene>("res://prey.tscn");
-	
+	static PackedScene preyScene = GD.Load<PackedScene>("res://creatures/prey.tscn");
+	public bool eaten = false;
 	
 	private void _on_body_entered(Node body){
-		//GD.Print(body.GetType());
-		if(body is Food){
+		if(body is Food && ! ((Food) body).eaten){
+			((Food) body).eaten = true;
 			body.CallDeferred("queue_free");
-			PackedScene preyScene = GD.Load<PackedScene>("res://creatures/prey.tscn");
 			Prey preyInstance = (Prey) preyScene.Instantiate();
 			preyInstance.clone(this);
 			preyInstance.Position = Position;

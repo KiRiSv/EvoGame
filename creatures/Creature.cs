@@ -4,20 +4,21 @@ using static MLtest;
 
 public partial class Creature : RigidBody2D
 {
-	public int layerSize = 10;
-	public int inputSize = 10;
-	public int outSize = 4;
-	public int maxSpeed = 35;
-	public int mutatetionChance = 10;
-	public float turningRate = .2F;
-	public int speedUpRate = 5;
-	public int rayCount = 5;
+	public static int layerSize = 10;
+	public static int inputSize = 10;
+	public static int outSize = 4;
+	public static int maxSpeed = 35;
+	public static int mutatetionChance = 10;
+	public static float turningRate = .2F;
+	public static int speedUpRate = 5;
+	public static int rayCount = 5;
 	public virtual float fov {get;set;} = .785F;
-	public float sightLength = 50F;
+	public static float sightLength = 100F;
 	int speed = 0;
 	float facingAngle = 0;
 	double[,] hiddenLayer;
 	double[,] output;
+	RayCast2D[] rays;
 	public void clone(Creature parent){
 		hiddenLayer = parent.hiddenLayer;
 		output = parent.output;
@@ -38,9 +39,13 @@ public partial class Creature : RigidBody2D
 	public void createRays(){
 		float startingAngle = -fov/2;
 		float raySpread = fov/(rayCount-1);
+		rays = new RayCast2D[rayCount];
 		for(int i = 0; i < rayCount; i++){
 			RayCast2D ray = new RayCast2D();
 			ray.TargetPosition = new Vector2(0,-sightLength).Rotated(startingAngle + (i*raySpread));
+			ray.SetCollisionMaskValue(1,true);
+			ray.SetCollisionMaskValue(2,true);
+			rays[i] = ray;
 			AddChild(ray);
 			//Ray visualization 
 			Line2D debugLine = new Line2D();
@@ -56,34 +61,44 @@ public partial class Creature : RigidBody2D
 		createRays();
 	}
 	public override void _Process(double delta){
-		double[] randomInput = new double[inputSize];
+		double[] input = new double[inputSize];
 		int node = 0;
-		for (; node < rayCount; node++){
-			
+		for (int i = 0; i < rayCount; i++){
+			RayCast2D ray = rays[i];
+			Node2D obj = (Node2D) ray.GetCollider();
+			if(obj is null){
+				input[node++] = 0;
+				input[node++] = 0;
+			} else if (obj is Food) {
+				input[node++] = 1;
+				input[node++] = (Position - obj.Position).Length();
+			} else if (obj is Prey){
+				input[node++] = 2;
+				input[node++] = (Position - obj.Position).Length();
+			} else {
+				input[node++] = -1;
+				input[node++] = (Position - obj.Position).Length();
+			}
 		}
-		randomInput[node++] = speed;
-		for(; node< inputSize; node++){
-			randomInput[i] = GD.RandRange(-1,1);
-		}
-		int choice = MLtest.getOutput(randomInput,hiddenLayer,output);
-		switch (3)
+		int choice = MLtest.getOutput(input,hiddenLayer,output);
+		switch (choice)
 		{
 			case 0:
-				facingAngle -= turningRate;
-				LinearVelocity = new Vector2(0,-speed).Rotated(facingAngle);
+				//facingAngle -= turningRate;
 				break;
 			case 1:
-				facingAngle += turningRate;
-				LinearVelocity = new Vector2(0,-speed).Rotated(facingAngle);
+				//facingAngle += turningRate;
 				break;
 			case 2:
-				speed = Math.Min(maxSpeed, speed+speedUpRate);
+				ApplyImpulse(new Vector2(0,-1));
 				break;
 			//case 3:
 				//LinearVelocity = new Vector2(8,0);
 				//break;
 		}
-		Rotation = facingAngle;
+		//LinearVelocity = new Vector2(0,-speed).Rotated(facingAngle);
+		//Rotation = facingAngle;
+		ApplyImpulse(new Vector2(0,-1));
 		//LookAt(LinearVelocity);
 	}
 }
