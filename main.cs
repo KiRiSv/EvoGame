@@ -9,9 +9,9 @@ public partial class main : Node2D
 		
 	}
 
-	static PackedScene preyScene = GD.Load<PackedScene>("res://prey.tscn");
-	static PackedScene predatorScene = GD.Load<PackedScene>("res://predator.tscn");
-	static PackedScene grassScene = GD.Load<PackedScene>("res://food.tscn");
+	static PackedScene preyScene = GD.Load<PackedScene>("res://creatures/prey.tscn");
+	static PackedScene predatorScene = GD.Load<PackedScene>("res://creatures/predator.tscn");
+	static PackedScene grassScene = GD.Load<PackedScene>("res://creatures/food.tscn");
 	
 	static bool mouse_down = false;
 	static Vector2 last_placement = new Vector2(0,0);

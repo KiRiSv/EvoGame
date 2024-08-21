@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://b2vfo74q8poy1"]
 
-[ext_resource type="Script" path="res://Food.cs" id="1_bw4p7"]
+[ext_resource type="Script" path="res://creatures/Food.cs" id="1_bw4p7"]
 
 [sub_resource type="Gradient" id="Gradient_jdrks"]
 offsets = PackedFloat32Array(0.0599769, 1)

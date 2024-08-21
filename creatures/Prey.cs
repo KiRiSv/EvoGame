@@ -2,7 +2,7 @@ using Godot;
 using System;
 using static MLtest;
 
-public partial class Predator : Creature
+public partial class Prey : Creature
 {
 	static int layerSize = 10;
 	static int inputSize = 10;
@@ -14,12 +14,13 @@ public partial class Predator : Creature
 	
 	private void _on_body_entered(Node body)
 	{
-		if(body is Prey){
+		//GD.Print(body.GetType());
+		if(body is Food){
 			body.CallDeferred("queue_free");
-			PackedScene predatorScene = GD.Load<PackedScene>("res://predator.tscn");
-			Predator predatorInstance = (Predator) predatorScene.Instantiate();
-			predatorInstance.clone(this);
-			AddChild(predatorInstance);
+			PackedScene preyScene = GD.Load<PackedScene>("res://creatures/prey.tscn");
+			Prey preyInstance = (Prey) preyScene.Instantiate();
+			preyInstance.clone(this);
+			AddChild(preyInstance);
 		}
 	}
 }
