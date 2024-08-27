@@ -6,7 +6,8 @@ public partial class main : Node2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		
+		GetNode<CanvasLayer>("Pause").Hide();
+		selectedButton = 0;
 	}
 
 	static PackedScene preyScene = GD.Load<PackedScene>("res://creatures/prey.tscn");
@@ -38,7 +39,38 @@ public partial class main : Node2D
 		main.mouseInBox = false;
 	}
 
+	private void _on_pause_pressed()
+	{
+		GetTree().Paused = true;
+		GetNode<CanvasLayer>("Pause").Show();
+		GetNode<CanvasLayer>("UI").Hide();
+	}
+	private void _on_resume_pressed()
+	{
+		
+		GetNode<CanvasLayer>("Pause").Hide();
+		GetNode<CanvasLayer>("UI").Show();
+		GetTree().Paused = false;
+	}
 	
+	private void _on_quit_pressed()
+	{
+		GetTree().Quit();
+	}
+	
+	private void _on_reset_pressed()
+	{
+		_on_resume_pressed();
+		GetTree().ReloadCurrentScene();
+	}
+	
+	private void _on_main_menu_pressed()
+	{
+		_on_resume_pressed();
+		GetTree().ChangeSceneToFile("res://menus/main_menu.tscn");
+		
+	}
+
 	public override void _Input(InputEvent @event)
 	{
 		// Mouse in viewport coordinates.
@@ -53,7 +85,7 @@ public partial class main : Node2D
 		// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if(mouse_down == true& 
+		if(mouse_down == true & 
 			(GetGlobalMousePosition().DistanceTo(last_placement) > 1) &
 			main.mouseInBox == false){
 			last_placement = GetGlobalMousePosition();
@@ -78,4 +110,15 @@ public partial class main : Node2D
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
 

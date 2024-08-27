@@ -14,4 +14,18 @@ public partial class main_menu : Control
 	{
 		GetTree().ChangeSceneToFile("res://main.tscn");
 	}
+	private void _on_settings_pressed()
+	{
+		GetTree().ChangeSceneToFile("res://menus/settings.tscn");
+	}
+	private void _on_quit_pressed()
+	{
+		GetTree().Quit();
+	}
+
+
 }
+
+
+
+

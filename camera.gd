@@ -1,13 +1,13 @@
 extends Camera2D
 
-@export var zoomSpeed : float = 10;
+@export var zoomSpeed : float = 20;
 
 var zoomTarget: Vector2
 var dragStartMousePos = Vector2.ZERO
 var dragStartCameraPos = Vector2.ZERO
 var isDragging : bool = false
-var zoom_min: Vector2 = Vector2(0.1, 0.1)
-var zoom_max: Vector2 = Vector2(5.0, 5.0)
+var zoom_min: Vector2 = Vector2(1, 1)
+var zoom_max: Vector2 = Vector2(10, 10)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -18,19 +18,27 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	#if Input.is_action_just_pressed("cam_zoom_in") or Input.is_action_just_pressed("cam_zoom_out"):
 	Zoom(delta)
 	WASDPan(delta)
 	DragPan()
 	
 func Zoom(delta):
+	var zoomEvent = false
 	if Input.is_action_just_pressed("cam_zoom_in"):
 		zoomTarget *= 1.2
-		
+		zoomEvent = true
+						
 	if Input.is_action_just_pressed("cam_zoom_out"):
+		zoomEvent = true
 		zoomTarget *= 0.8
-	
+		
 	zoomTarget = clamp(zoomTarget,zoom_min,zoom_max)
-	zoom = zoom.slerp(zoomTarget, zoomSpeed * delta)
+	var oldpos = get_global_mouse_position()
+	zoom = zoomTarget
+	#zoom = zoom.lerp(zoomTarget, zoomSpeed * delta)
+	if zoomEvent:
+		position += oldpos - get_global_mouse_position()
 	
 	pass
 
@@ -53,6 +61,9 @@ func WASDPan(delta):
 		
 	moveAmount = moveAmount.normalized()
 	position += moveAmount * delta * 1000 * (1/zoom.x)
+	var offset = get_viewport().size/2
+	position.x = clamp(position.x, 50, 1950)
+	position.y = clamp(position.y, 50, 1950)
 
 
 func DragPan():
@@ -66,5 +77,7 @@ func DragPan():
 		
 	if isDragging:
 		var moveVector = get_viewport().get_mouse_position() - dragStartMousePos
-		position = dragStartCameraPos - moveVector * 1/zoom.x	
+		position = dragStartCameraPos - moveVector * 1/zoom.x
+		position.x = clamp(position.x, 50, 1950)
+		position.y = clamp(position.y, 50, 1950)
 

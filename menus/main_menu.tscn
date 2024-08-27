@@ -30,3 +30,14 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 42
 text = "START GAME"
+
+[node name="Settings" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="Quit" type="Button" parent="GridContainer"]
+layout_mode = 2
+text = "Quit"
+
+[connection signal="pressed" from="GridContainer/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="GridContainer/Quit" to="." method="_on_quit_pressed"]

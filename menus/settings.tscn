@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://cx2uwndh0ajil"]
+
+[ext_resource type="Script" path="res://menus/settings.cs" id="1_fo2d7"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_5p3qc"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_dljav"]
+events = [SubResource("InputEventKey_5p3qc")]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fo2d7")
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 0
+offset_right = 78.0
+offset_bottom = 37.0
+shortcut = SubResource("Shortcut_dljav")
+text = "Back"
+
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
