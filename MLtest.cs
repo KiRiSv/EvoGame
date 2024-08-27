@@ -32,13 +32,13 @@ public partial class MLtest : Node
 	public static double[,] mutate(double[,] arr){
 		long i = GD.Randi() % arr.GetLength(0);
 		long j = GD.Randi() % arr.GetLength(1);
-		arr[i,j] = GD.RandRange(-1,1);
+		arr[i,j] = GD.RandRange(-100,100);
 		return arr;
 	}
 	public static double[,] setRandom(double[,] arr){
 		for(int i = 0; i < arr.GetLength(0); i++){
 			for(int j = 0; j < arr.GetLength(1);j++){
-				arr[i,j] = GD.RandRange(-1,1);
+				arr[i,j] = GD.RandRange(-100,100);
 			}
 		}
 		return arr;

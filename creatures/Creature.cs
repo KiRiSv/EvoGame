@@ -4,18 +4,16 @@ using static MLtest;
 
 public partial class Creature : RigidBody2D
 {
-	public static int layerSize = 10;
-	public static int inputSize = 10;
-	public static int outSize = 4;
-	public static int maxSpeed = 35;
-	public static int mutatetionChance = 10;
-	public static float turningRate = .2F;
-	public static int speedUpRate = 5;
-	public static int rayCount = 5;
+	private static int layerSize = 30;
+	private static int inputSize = 10;
+	private static int outSize = 4;
+	private static int maxSpeed = 35;
+	private static int mutatetionChance = 10;
+	private static float turningRate = .2F;
+	private static int rayCount = 5;
 	public virtual float fov {get;set;} = .785F;
-	public static float sightLength = 100F;
-	int speed = 0;
-	float facingAngle = 0;
+	private static float sightLength = 100F;
+	private int chosenMove = 0;
 	double[,] hiddenLayer;
 	double[,] output;
 	RayCast2D[] rays;
@@ -60,6 +58,32 @@ public partial class Creature : RigidBody2D
 		output = MLtest.setRandom(output);
 		createRays();
 	}
+	// Makes them look where the f they goin
+	private void LookWhereGo(){
+		if(LinearVelocity.Length() != 0 && Math.Abs(LinearVelocity.Angle() + ((float) Math.PI / 2 ) - Rotation) > 0.04){
+			AngularVelocity = (LinearVelocity.Angle() + ((float)Math.PI / 2 ) - Rotation);
+		}
+	}
+	public override void _IntegrateForces(PhysicsDirectBodyState2D state){
+		LookWhereGo();
+		switch(chosenMove){
+			case 0:
+				//do nothing
+				break;
+			case 1:
+				//Go forwards
+				ApplyForce(new Vector2(0,-maxSpeed).Rotated(Rotation));
+				break;
+			case 2:
+				//go left
+				ApplyForce(new Vector2(0,-maxSpeed).Rotated(Rotation-turningRate));
+				break;
+			case 3:
+				//go right
+				ApplyForce(new Vector2(0,-maxSpeed).Rotated(Rotation+turningRate));
+				break;
+		}
+	}
 	public override void _Process(double delta){
 		double[] input = new double[inputSize];
 		int node = 0;
@@ -80,25 +104,24 @@ public partial class Creature : RigidBody2D
 				input[node++] = (Position - obj.Position).Length();
 			}
 		}
-		int choice = MLtest.getOutput(input,hiddenLayer,output);
-		switch (choice)
-		{
-			case 0:
-				//facingAngle -= turningRate;
-				break;
-			case 1:
-				//facingAngle += turningRate;
-				break;
-			case 2:
-				ApplyImpulse(new Vector2(0,-1));
-				break;
-			//case 3:
-				//LinearVelocity = new Vector2(8,0);
+		chosenMove = MLtest.getOutput(input,hiddenLayer,output);
+		//GD.Print(chosenMove);
+		//switch (choice)
+		//{
+			//case 0:
+				////do nothing
+				//chosenMove = 0
 				//break;
-		}
-		//LinearVelocity = new Vector2(0,-speed).Rotated(facingAngle);
-		//Rotation = facingAngle;
-		ApplyImpulse(new Vector2(0,-1));
-		//LookAt(LinearVelocity);
+			//case 1:
+				////go forwards
+				//chosenMove = 1
+				//break;
+			//case 2:
+				////ApplyImpulse(new Vector2(0,-1));
+				//break;
+			////case 3:
+				////LinearVelocity = new Vector2(8,0);
+				////break;
+		//}
 	}
 }

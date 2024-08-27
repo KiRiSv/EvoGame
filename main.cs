@@ -15,7 +15,7 @@ public partial class main : Node2D
 	static PackedScene grassScene = GD.Load<PackedScene>("res://creatures/food.tscn");
 	
 	static bool mouse_down = false;
-	static Vector2 last_placement = new Vector2(0,0);
+	static Vector2 last_placement;
 	static int selectedButton = 0;
 	static bool mouseInBox = false;
 	
