@@ -15,7 +15,8 @@ public partial class Prey : Creature
 			Prey preyInstance = (Prey) preyScene.Instantiate();
 			preyInstance.clone(this);
 			preyInstance.Position = Position;
-			GetParent().AddChild(preyInstance);
+			GetParent().CallDeferred("add_child",preyInstance);
+			//GetParent().AddChild(preyInstance);
 		}
 	}
 }

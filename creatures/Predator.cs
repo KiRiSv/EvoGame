@@ -13,7 +13,8 @@ public partial class Predator : Creature
 			Predator predatorInstance = (Predator) predatorScene.Instantiate();
 			predatorInstance.clone(this);
 			predatorInstance.Position = Position;
-			GetParent().AddChild(predatorInstance);
+			GetParent().CallDeferred("add_child",predatorInstance);
+			//GetParent().AddChild(predatorInstance);
 		}
 	}
 }

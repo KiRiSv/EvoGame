@@ -23,7 +23,7 @@ func _process(delta):
 	WASDPan(delta)
 	DragPan()
 	
-func Zoom(delta):
+func Zoom(_delta):
 	var zoomEvent = false
 	if Input.is_action_just_pressed("cam_zoom_in"):
 		zoomTarget *= 1.2
@@ -36,7 +36,7 @@ func Zoom(delta):
 	zoomTarget = clamp(zoomTarget,zoom_min,zoom_max)
 	var oldpos = get_global_mouse_position()
 	zoom = zoomTarget
-	#zoom = zoom.lerp(zoomTarget, zoomSpeed * delta)
+	#zoom = zoom.lerp(zoomTarget, zoomSpeed * _delta)
 	if zoomEvent:
 		position += oldpos - get_global_mouse_position()
 	
@@ -61,7 +61,6 @@ func WASDPan(delta):
 		
 	moveAmount = moveAmount.normalized()
 	position += moveAmount * delta * 1000 * (1/zoom.x)
-	var offset = get_viewport().size/2
 	position.x = clamp(position.x, 50, 1950)
 	position.y = clamp(position.y, 50, 1950)
 

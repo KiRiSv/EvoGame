@@ -94,31 +94,23 @@ public partial class main : Node2D
 				Prey preyInstance = (Prey) main.preyScene.Instantiate();
 				preyInstance.Position = last_placement;
 				preyInstance.initialize();
-				AddChild(preyInstance);
+				GetNode<Node2D>("Preys").AddChild(preyInstance);
 			}	
 			else if (selectedButton==2){
 				Predator predatorInstance = (Predator) main.predatorScene.Instantiate();
 				predatorInstance.initialize();
 				predatorInstance.Position = last_placement;
-				AddChild(predatorInstance);
+				GetNode<Node2D>("Predators").AddChild(predatorInstance);
 			}
 			else if (selectedButton==3){
 				Node2D grassInstance = (Node2D) main.grassScene.Instantiate();
 				grassInstance.Position = last_placement;
-				AddChild(grassInstance);
+				GetNode<Node2D>("Plants").AddChild(grassInstance);
 			}
 		}
+		
+		GetNode<RichTextLabel>("UI/Pop/VBoxContainer/pop").Text = "Prey: " + GetNode<Node2D>("Preys").GetChildCount()
+			+ "\nPredator: " + GetNode<Node2D>("Predators").GetChildCount()
+			+ "\nPlants: " + GetNode<Node2D>("Plants").GetChildCount();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-

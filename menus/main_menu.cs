@@ -25,7 +25,3 @@ public partial class main_menu : Control
 
 
 }
-
-
-
-

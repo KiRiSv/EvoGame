@@ -17,5 +17,3 @@ public partial class settings : Control
 	GetTree().ChangeSceneToFile("res://menus/main_menu.tscn");
 	}
 }
-
-
