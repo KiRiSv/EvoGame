@@ -93,12 +93,12 @@ public partial class main : Node2D
 			if (selectedButton==1){
 				Prey preyInstance = (Prey) main.preyScene.Instantiate();
 				preyInstance.Position = last_placement;
-				preyInstance.initialize();
+				preyInstance.Initialize();
 				GetNode<Node2D>("Preys").AddChild(preyInstance);
 			}	
 			else if (selectedButton==2){
 				Predator predatorInstance = (Predator) main.predatorScene.Instantiate();
-				predatorInstance.initialize();
+				predatorInstance.Initialize();
 				predatorInstance.Position = last_placement;
 				GetNode<Node2D>("Predators").AddChild(predatorInstance);
 			}
