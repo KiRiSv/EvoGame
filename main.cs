@@ -7,12 +7,13 @@ public partial class main : Node2D
 	public override void _Ready()
 	{
 		GetNode<CanvasLayer>("Pause").Hide();
+		Creature.Pretrain();
 		selectedButton = 0;
 	}
 
-	static public  PackedScene preyScene = GD.Load<PackedScene>("res://creatures/prey.tscn");
-	static public PackedScene predatorScene = GD.Load<PackedScene>("res://creatures/predator.tscn");
-	static public PackedScene grassScene = GD.Load<PackedScene>("res://creatures/food.tscn");
+	static readonly PackedScene preyScene = GD.Load<PackedScene>("res://creatures/prey.tscn");
+	static readonly PackedScene predatorScene = GD.Load<PackedScene>("res://creatures/predator.tscn");
+	static readonly PackedScene grassScene = GD.Load<PackedScene>("res://creatures/food.tscn");
 	
 	static bool mouse_down = false;
 	static Vector2 last_placement;
@@ -68,18 +69,17 @@ public partial class main : Node2D
 	{
 		_on_resume_pressed();
 		GetTree().ChangeSceneToFile("res://menus/main_menu.tscn");
-		
 	}
 
 	public override void _Input(InputEvent @event)
 	{
 		// Mouse in viewport coordinates.
-		if (@event is InputEventMouseButton eventMouseButton)
+		if (@event is InputEventMouseButton eventMouseButton){
 			if ((int)eventMouseButton.ButtonIndex == 1 & eventMouseButton.Pressed == true)
 				main.mouse_down = true;
-				
 			else if ((int)eventMouseButton.ButtonIndex == 1 & eventMouseButton.Pressed == false)
 				main.mouse_down = false;
+		}
 	}
 	
 		// Called every frame. 'delta' is the elapsed time since the previous frame.

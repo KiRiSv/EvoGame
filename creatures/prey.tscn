@@ -9,8 +9,8 @@ size = Vector2(18, 18)
 [node name="Prey" type="RigidBody2D"]
 collision_mask = 2
 gravity_scale = 0.0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_44y3n")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

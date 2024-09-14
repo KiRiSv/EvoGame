@@ -5,26 +5,46 @@ public partial class Prey : Creature
 {
 	public override float Fov {get;set;} = 1.75F;
 	static readonly PackedScene preyScene = GD.Load<PackedScene>("res://creatures/prey.tscn");
-	
-	public override double[] ChooseTarget(double[] input){
-		double[] target = {.5,0};
-		int midRay = input.Length/2;
+
+	public override double[] SelectTarget(double[] input){
+		double[] target = ChooseTarget(input);
 		visionCone.Color = new Color(1,1,1,.4F);
 		for (int i = 0; i < input.Length; i+=2){
 			//food
-			if(input[i] == 1){
-				target[0] = 1;
-				target[1] = Math.Sign(i - midRay);
+			if(input[i] == .5){
 				if(visionCone.Color.B == 1)
 					visionCone.Color = new Color(0,1,0,.4F);
 			}
 			// prey 
-			else if (input[i] == 2){
+			else if (input[i] == 1){
+				if(visionCone.Color.B == 1)
+					visionCone.Color = new Color(0,1,0,.4F);
+			}
+			// predator
+			else if (input[i] == -1){
+				visionCone.Color = new Color(1,0,0,.4F);
+			}
+		}
+		return target;
+	}
+	public override void Initialize(){
+		nn = neuralNetwork.Call("createPrey",rayCount);
+		CreateRays();
+	}
+	public static double[] ChooseTarget(double[] input){
+		double[] target = {.5,0};
+		int midRay = input.Length/2;
+		for (int i = 0; i < input.Length; i+=2){
+			//food
+			if(input[i] == .5){
+				target[0] = 1;
+				target[1] = Math.Sign(i - midRay);
+			}
+			// prey 
+			else if (input[i] == 1){
 				target[0] = Math.Max(.75,target[0]);
 				if(Math.Abs(target[1]) != 1)
 					target[1] = Math.Sign(i - midRay) / 2;
-				if(visionCone.Color.B == 1)
-					visionCone.Color = new Color(0,1,0,.4F);
 			}
 			// predator
 			else if (input[i] == -1){
@@ -38,7 +58,6 @@ public partial class Prey : Creature
 				} else {
 					target[1] = -Math.Sign(i - midRay);
 				}
-				visionCone.Color = new Color(1,0,0,.4F);
 			}
 		}
 		target[1] = (target[1]/2) +.5;

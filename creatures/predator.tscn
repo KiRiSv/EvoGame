@@ -9,8 +9,8 @@ size = Vector2(0.184466, 0.262051)
 [node name="Predator" type="RigidBody2D"]
 collision_layer = 2
 gravity_scale = 0.0
-max_contacts_reported = 10
 contact_monitor = true
+max_contacts_reported = 10
 script = ExtResource("1_iygci")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
