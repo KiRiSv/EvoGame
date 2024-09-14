@@ -16,4 +16,18 @@ public partial class settings : Control
 	{
 	GetTree().ChangeSceneToFile("res://menus/main_menu.tscn");
 	}
+	
+	private void _on_prey_fov_value_changed(int fov){
+
+		GlobalVariables.Instance.preyFov = fov * Mathf.Pi / 180;
+
+	}
+	
+	private void _on_pred_fov_value_changed(int fov){
+		GlobalVariables.Instance.predFov = fov * Mathf.Pi / 180;
+	}
+
+	private void _on_raycast_value_changed(int rayCount){
+		GlobalVariables.Instance.rayCount = rayCount;
+	}
 }

@@ -57,5 +57,3 @@ public partial class Prey : Creature
 		}
 	}
 }
-
-

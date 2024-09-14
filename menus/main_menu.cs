@@ -8,6 +8,7 @@ public partial class main_menu : Control
 	{
 		Button button = GetNode<Button>("GridContainer/Start"); 
 		button.Pressed += StartGame;
+		GD.Randomize();
 	}
 
 	private void StartGame()

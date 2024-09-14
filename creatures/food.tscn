@@ -29,3 +29,9 @@ polygon = PackedVector2Array(1, -1, 1, -1, 1, -1, 1, 3, -3, 3, -3, -1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
 shape = SubResource("RectangleShape2D_rd5sv")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="spawnFood"]

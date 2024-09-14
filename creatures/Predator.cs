@@ -40,5 +40,3 @@ public partial class Predator : Creature
 		}
 	}
 }
-
-
