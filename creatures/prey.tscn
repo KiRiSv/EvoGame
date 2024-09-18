@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cejm0gou8qid0"]
 
-[ext_resource type="Script" path="res://creatures/Prey.cs" id="1_44y3n"]
+[ext_resource type="Script" path="res://Creatures/Prey.cs" id="1_44y3n"]
 [ext_resource type="Texture2D" uid="uid://1blyi1pfbel6" path="res://pngs/prey coded.png" id="1_82ld7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wu5ny"]

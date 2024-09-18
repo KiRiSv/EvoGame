@@ -3,7 +3,7 @@ using System;
 
 public partial class Predator : Creature
 {
-	static readonly PackedScene predatorScene = GD.Load<PackedScene>("res://creatures/predator.tscn");
+	static readonly PackedScene predatorScene = GD.Load<PackedScene>("res://Creatures/predator.tscn");
 	public override double[] SelectTarget(double[] input){
 		double[] target = ChooseTarget(input);
 		if(target[0] == 1){

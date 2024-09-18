@@ -167,7 +167,6 @@ position = Vector2(1984, 987)
 shape = SubResource("RectangleShape2D_w4djd")
 
 [node name="Pause" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="PauseMenu" type="PanelContainer" parent="Pause"]
 process_mode = 2
@@ -200,6 +199,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "Quit"
 
+[node name="ReTrain" type="Button" parent="Pause/PauseMenu/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+text = "Retrain"
+
 [node name="Plants" type="Node2D" parent="."]
 
 [node name="Preys" type="Node2D" parent="."]
@@ -227,3 +231,4 @@ text = "Quit"
 [connection signal="pressed" from="Pause/PauseMenu/VBoxContainer/Reset" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="Pause/PauseMenu/VBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]
 [connection signal="pressed" from="Pause/PauseMenu/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Pause/PauseMenu/VBoxContainer/ReTrain" to="." method="_on_re_train_pressed"]
