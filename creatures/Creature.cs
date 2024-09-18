@@ -1,26 +1,47 @@
 using Godot;
 using System;
+using System.IO;
 using System.Linq;
 
 public abstract partial class Creature : RigidBody2D{
 	// private static int inputSize = 10;
 	private static int maxSpeed = 70;
-	private static float turningRate = .8F;
+	private static float turningRate = 1.5F;
 	public static int rayCount = 5;
 	public virtual float Fov {get;set;} = .785F;
 	private static float sightLength = 100F;
 	public bool eaten = false;
 	public Variant nn;
-	public static readonly GDScript neuralNetwork = GD.Load<GDScript>("res://Creatures/neuralNet.gd");
+	public static GDScript neuralNetwork = GD.Load<GDScript>("res://Creatures/neuralNet.gd");
+	public static GodotObject neuralNetworkNode = (GodotObject)neuralNetwork.New();
 	private double[] chosenMove = {0,0};
 	Line2D debugTarget;
 	Line2D debugChoice;
 	public Polygon2D visionCone;
 	RayCast2D[] rays;
 	public void Clone(Creature parent){
-		CreateRays();
-		nn = neuralNetwork.Call("clone", parent.nn);
+		Initialize();
+		neuralNetwork.Call("saveParent", parent.nn);
+        CreateVariance();
+		File.Delete("Creatures/parent.nn");
+		nn = neuralNetwork.Call("createClone", rayCount);
+		File.Delete("Creatures/clone.nn");
 	}
+
+	public static void CreateVariance(){
+        using var input = File.OpenText("Creatures/parent.nn");
+        using var output = new StreamWriter("Creatures/clone.nn");
+        string line;
+        while (null != (line = input.ReadLine()))
+        {
+			if(line.Contains("weight :") && GD.Randf() < .1){
+                output.WriteLine("weight : " + ((GD.Randf() * 2) - 1));
+			} else {
+            	output.WriteLine(line);
+			}
+        }
+    }
+
 	public void CreateRays(){
 		float startingAngle = -Fov/2;
 		float raySpread = Fov/(rayCount-1);
@@ -66,21 +87,28 @@ public abstract partial class Creature : RigidBody2D{
 		AddChild(debugChoice);
 	}
 	public static void Pretrain(){
-		GD.Print("Pre training");
-		Variant prednn = neuralNetwork.Call("createNetwork", rayCount);
-		// Variant preynn = neuralNetwork.Call("createNetwork", rayCount);
-		for (int i = 0; i < 10; i++){
-			GD.Print(i/10);
+		// GD.Print("Pre training");
+		Variant prednn = neuralNetworkNode.Call("createNetwork", rayCount);
+		Variant preynn = neuralNetworkNode.Call("createNetwork", rayCount);
+		int trainingReps = 1000;
+		for (int i = 0; i < trainingReps; i++){
+			GD.Print(i/(double)trainingReps*100.0,"%");
 			double[][] sets = MakeTrainingArrays();
-			double[][] predTargets = (double[][])sets.Select( x => Predator.ChooseTarget(x));
-			double[][] preyTargets = (double[][])sets.Select( x => Prey.ChooseTarget(x));
+			double[][] predTargets = sets.Select( x => Predator.ChooseTarget(x)).ToArray();
+			double[][] preyTargets = sets.Select( x => Prey.ChooseTarget(x)).ToArray();
 			for (int j = 0; j < sets.GetLength(0); j++){
-				// neuralNetwork.Call("train", preynn, sets[j], preyTargets[j]);
+				neuralNetwork.Call("train", preynn, sets[j], preyTargets[j]);
 				neuralNetwork.Call("train", prednn, sets[j], predTargets[j]);
+				//Train the set of 0s more as it is the most common scenario
+				if(j % 30 == 0){
+					neuralNetwork.Call("train", preynn, sets[0], preyTargets[0]);
+					neuralNetwork.Call("train", prednn, sets[0], predTargets[0]);
+				}
 			}
 		}
+		GD.Print("100%");
 		neuralNetwork.Call("savePredator", prednn);
-		// neuralNetwork.Call("savePrey", preynn);
+		neuralNetwork.Call("savePrey", preynn);
 	}
 	private static double[][] Map(double[][] array, Func<double[],double[]> function){
 		double[][] result = new double[array.GetLength(0)][];
@@ -96,24 +124,33 @@ public abstract partial class Creature : RigidBody2D{
 	}
 	private static double[][] MakeTrainingArrays(){
 		if(rayCount == 1){
-			double[] detectionOptions = {-1,0,.5F,1};
-			double[][] sets = new double[4][];
+			double[] detectionOptions = {0,-1,.5F,1};
+			double[][] sets = new double[detectionOptions.Length][];
 			for (int i = 0; i < detectionOptions.Length; i++){
-				double[] set = {detectionOptions[i],GD.Randf()};
-				sets[i] = set;
+				if(detectionOptions[i] == 0){
+					double[] set = {detectionOptions[i],0};
+					sets[i] = set;
+				}else{
+					double[] set = {detectionOptions[i],GD.Randf()};
+					sets[i] = set;
+				}
 			}
 			return sets;
 		} else {
 			double[][] sets = new double[(int)Math.Pow(4, rayCount)][];
 			double[][] subSets = MakeTrainingArrays(rayCount-1);
 			int setInd = 0;
-			double[] detectionOptions = {-1,0,.5F,1};
+			double[] detectionOptions = {0,-1,.5F,1};
 			for (int i = 0; i < subSets.GetLength(0); i++){
 				for (int j = 0; j < detectionOptions.Length; j++){
 					double[] set = new double[rayCount*2];
-					set[0] = detectionOptions[i];
-					set[1] = GD.Randf();
-					subSets[j].CopyTo(set,2);
+					set[0] = detectionOptions[j];
+					if(set[0] == 0){
+						set[1] = 0;
+					} else {
+						set[1] = GD.Randf();
+					}
+					subSets[i].CopyTo(set,2);
 					sets[setInd++] = set;
 				}
 			}
@@ -123,24 +160,34 @@ public abstract partial class Creature : RigidBody2D{
 
     private static double[][] MakeTrainingArrays(int count){
 		if(count == 1){
-			double[] detectionOptions = {-1,0,.5F,1};
-			double[][] sets = new double[4][];
+			double[] detectionOptions = {0,-1,.5F,1};
+			double[][] sets = new double[detectionOptions.Length][];
 			for (int i = 0; i < detectionOptions.Length; i++){
-				double[] set = {detectionOptions[i],GD.Randf()};
-				sets[i] = set;
+				if(detectionOptions[i] == 0){
+					double[] set = {detectionOptions[i],0};
+					sets[i] = set;
+				}else{
+					double[] set = {detectionOptions[i],GD.Randf()};
+					sets[i] = set;
+				}
 			}
 			return sets;
 		} else {
-			double[][] sets = new double[(int)Math.Pow(4, rayCount)][];
-			double[][] subSets = MakeTrainingArrays(rayCount-1);
+			double[][] sets = new double[(int)Math.Pow(4, count)][];
+			double[][] subSets = MakeTrainingArrays(count-1);
 			int setInd = 0;
-			double[] detectionOptions = {-1,0,.5F,1};
+			double[] detectionOptions = {0,-1,.5F,1};
 			for (int i = 0; i < subSets.GetLength(0); i++){
 				for (int j = 0; j < detectionOptions.Length; j++){
-					double[] set = new double[rayCount*2];
-					set[0] = detectionOptions[i];
-					set[1] = GD.Randf();
-					subSets[j].CopyTo(set,2);
+					double[] set = new double[count*2];
+					// GD.Print(count);
+					set[0] = detectionOptions[j];
+					if(set[0] == 0){
+						set[1] = 0;
+					} else {
+						set[1] = GD.Randf();
+					}
+					subSets[i].CopyTo(set,2);
 					sets[setInd++] = set;
 				}
 			}

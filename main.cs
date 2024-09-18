@@ -7,13 +7,12 @@ public partial class main : Node2D
 	public override void _Ready()
 	{
 		GetNode<CanvasLayer>("Pause").Hide();
-		Creature.Pretrain();
 		selectedButton = 0;
 	}
 
-	static readonly PackedScene preyScene = GD.Load<PackedScene>("res://creatures/prey.tscn");
-	static readonly PackedScene predatorScene = GD.Load<PackedScene>("res://creatures/predator.tscn");
-	static readonly PackedScene grassScene = GD.Load<PackedScene>("res://creatures/food.tscn");
+	static readonly PackedScene preyScene = GD.Load<PackedScene>("res://Creatures/prey.tscn");
+		static readonly PackedScene predatorScene = GD.Load<PackedScene>("res://Creatures/predator.tscn");
+	static readonly PackedScene grassScene = GD.Load<PackedScene>("res://Creatures/food.tscn");
 	
 	static bool mouse_down = false;
 	static Vector2 last_placement;
@@ -71,6 +70,10 @@ public partial class main : Node2D
 		GetTree().ChangeSceneToFile("res://menus/main_menu.tscn");
 	}
 
+	private void _on_re_train_pressed()
+	{
+		Creature.Pretrain();
+	}
 	public override void _Input(InputEvent @event)
 	{
 		// Mouse in viewport coordinates.

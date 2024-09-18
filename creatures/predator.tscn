@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://1766wymajcs"]
 
 [ext_resource type="Texture2D" uid="uid://den3pok28vqkr" path="res://pngs/predator.png" id="1_ii7yj"]
-[ext_resource type="Script" path="res://creatures/Predator.cs" id="1_iygci"]
+[ext_resource type="Script" path="res://Creatures/Predator.cs" id="1_iygci"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kglvw"]
 size = Vector2(0.184466, 0.262051)
