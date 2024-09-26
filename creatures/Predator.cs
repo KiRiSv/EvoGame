@@ -17,7 +17,7 @@ public partial class Predator : Creature
 	}
 	public static double[] ChooseTarget(double[] input){
 		double[] target = {.5,0};
-		int midRay = input.Length/2;
+		int midRay = (input.Length/2)-1;
 		for (int i = 0; i < input.Length; i+=2){
 			//food
 			if(input[i] == .5){
@@ -27,7 +27,7 @@ public partial class Predator : Creature
 			}
 			// prey 
 			else if (input[i] == 1){
-				target[0] = 1;
+				target[0] = 1.0;
 				target[1] = Math.Sign(i - midRay);
 			}
 		}
@@ -35,7 +35,7 @@ public partial class Predator : Creature
 		return target;
 	}
 	public override void Initialize(){
-		nn = neuralNetwork.Call("createPredator",rayCount);
+		nn = neuralNetwork.Call("createPredator",GlobalVariables.Instance.rayCount);
 		CreateRays();
 	}
 	private void _on_body_entered(Node body){
@@ -45,6 +45,7 @@ public partial class Predator : Creature
 			Predator predatorInstance = (Predator) predatorScene.Instantiate();
 			predatorInstance.Clone(this);
 			predatorInstance.Position = Position;
+			predatorInstance.Rotation = Rotation;
 			GetParent().CallDeferred("add_child",predatorInstance);
 			//GetParent().AddChild(predatorInstance);
 		}

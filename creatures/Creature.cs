@@ -7,7 +7,6 @@ public abstract partial class Creature : RigidBody2D{
 	// private static int inputSize = 10;
 	private static int maxSpeed = 70;
 	private static float turningRate = 1.5F;
-	public static int rayCount = 5;
 	public virtual float Fov {get;set;} = .785F;
 	private static float sightLength = 100F;
 	public bool eaten = false;
@@ -24,7 +23,7 @@ public abstract partial class Creature : RigidBody2D{
 		neuralNetwork.Call("saveParent", parent.nn);
         CreateVariance();
 		File.Delete("Creatures/parent.nn");
-		nn = neuralNetwork.Call("createClone", rayCount);
+		nn = neuralNetwork.Call("createClone", GlobalVariables.Instance.rayCount);
 		File.Delete("Creatures/clone.nn");
 	}
 
@@ -44,19 +43,19 @@ public abstract partial class Creature : RigidBody2D{
 
 	public void CreateRays(){
 		float startingAngle = -Fov/2;
-		float raySpread = Fov/(rayCount-1);
-		rays = new RayCast2D[rayCount];
+		float raySpread = Fov/(GlobalVariables.Instance.rayCount-1);
+		rays = new RayCast2D[GlobalVariables.Instance.rayCount];
 		visionCone = new();
 		int coneSegmentFactor = 10;
-		Vector2[] nodes = new Vector2[(rayCount*coneSegmentFactor)+1];
+		Vector2[] nodes = new Vector2[(GlobalVariables.Instance.rayCount*coneSegmentFactor)+1];
 		nodes[0] = new Vector2(0,0);
 		int nodeIndex = 1;
-		for(int i = 0; i < rayCount; i++){
+		for(int i = 0; i < GlobalVariables.Instance.rayCount; i++){
 			RayCast2D ray = new();
 			ray.TargetPosition = new Vector2(0,-sightLength).Rotated(startingAngle + (i*raySpread));
 			for (int j = 0; j < coneSegmentFactor; j++){
 				nodes[nodeIndex++] = new Vector2(0,-sightLength).Rotated(startingAngle + ((i+(j*(1F/coneSegmentFactor)))*raySpread));
-				if(i == rayCount-1)
+				if(i == GlobalVariables.Instance.rayCount-1)
 					break;
 			}
 			ray.SetCollisionMaskValue(1,true);
@@ -88,8 +87,8 @@ public abstract partial class Creature : RigidBody2D{
 	}
 	public static void Pretrain(){
 		// GD.Print("Pre training");
-		Variant prednn = neuralNetworkNode.Call("createNetwork", rayCount);
-		Variant preynn = neuralNetworkNode.Call("createNetwork", rayCount);
+		Variant prednn = neuralNetworkNode.Call("createNetwork", GlobalVariables.Instance.rayCount);
+		Variant preynn = neuralNetworkNode.Call("createNetwork", GlobalVariables.Instance.rayCount);
 		int trainingReps = 1000;
 		for (int i = 0; i < trainingReps; i++){
 			GD.Print(i/(double)trainingReps*100.0,"%");
@@ -123,8 +122,8 @@ public abstract partial class Creature : RigidBody2D{
 		return result;
 	}
 	private static double[][] MakeTrainingArrays(){
-		if(rayCount == 1){
-			double[] detectionOptions = {0,-1,.5F,1};
+		if(GlobalVariables.Instance.rayCount == 1){
+			double[] detectionOptions = {0,.75,.5,1};
 			double[][] sets = new double[detectionOptions.Length][];
 			for (int i = 0; i < detectionOptions.Length; i++){
 				if(detectionOptions[i] == 0){
@@ -137,13 +136,13 @@ public abstract partial class Creature : RigidBody2D{
 			}
 			return sets;
 		} else {
-			double[][] sets = new double[(int)Math.Pow(4, rayCount)][];
-			double[][] subSets = MakeTrainingArrays(rayCount-1);
+			double[][] sets = new double[(int)Math.Pow(4, GlobalVariables.Instance.rayCount)][];
+			double[][] subSets = MakeTrainingArrays(GlobalVariables.Instance.rayCount-1);
 			int setInd = 0;
-			double[] detectionOptions = {0,-1,.5F,1};
+			double[] detectionOptions = {0,.75,.5,1};
 			for (int i = 0; i < subSets.GetLength(0); i++){
 				for (int j = 0; j < detectionOptions.Length; j++){
-					double[] set = new double[rayCount*2];
+					double[] set = new double[GlobalVariables.Instance.rayCount*2];
 					set[0] = detectionOptions[j];
 					if(set[0] == 0){
 						set[1] = 0;
@@ -160,7 +159,7 @@ public abstract partial class Creature : RigidBody2D{
 
     private static double[][] MakeTrainingArrays(int count){
 		if(count == 1){
-			double[] detectionOptions = {0,-1,.5F,1};
+			double[] detectionOptions = {0,.75,.5,1};
 			double[][] sets = new double[detectionOptions.Length][];
 			for (int i = 0; i < detectionOptions.Length; i++){
 				if(detectionOptions[i] == 0){
@@ -176,7 +175,7 @@ public abstract partial class Creature : RigidBody2D{
 			double[][] sets = new double[(int)Math.Pow(4, count)][];
 			double[][] subSets = MakeTrainingArrays(count-1);
 			int setInd = 0;
-			double[] detectionOptions = {0,-1,.5F,1};
+			double[] detectionOptions = {0,.75,.5,1};
 			for (int i = 0; i < subSets.GetLength(0); i++){
 				for (int j = 0; j < detectionOptions.Length; j++){
 					double[] set = new double[count*2];
@@ -217,17 +216,17 @@ public abstract partial class Creature : RigidBody2D{
 		}
 	}
 	public override void _IntegrateForces(PhysicsDirectBodyState2D state){
-		AngularVelocity = (float)((chosenMove[1] -.5) * turningRate);
-		LinearVelocity = new Vector2(0, (float)-chosenMove[0] * maxSpeed).Rotated(Rotation);
+		// AngularVelocity = (float)((chosenMove[1] -.5) * turningRate);
+		// LinearVelocity = new Vector2(0, (float)-chosenMove[0] * maxSpeed).Rotated(Rotation);
 	}
 	public abstract double[] SelectTarget(double[] input);
 	public override void _Process(double delta){
 		if(eaten){
 			return;
 		}
-		double[] input = new double[rayCount*2];
+		double[] input = new double[GlobalVariables.Instance.rayCount*2];
 		int node = 0;
-		for (int i = 0; i < rayCount; i++){
+		for (int i = 0; i < GlobalVariables.Instance.rayCount; i++){
 			RayCast2D ray = rays[i];
 			Node2D obj = (Node2D) ray.GetCollider();
 			if(obj is null){
@@ -240,32 +239,18 @@ public abstract partial class Creature : RigidBody2D{
 				input[node++] = 1;
 				input[node++] = (Position - obj.Position).Length();
 			} else if (obj is Predator) {
-				input[node++] = -1;
+				input[node++] = .75;
 				input[node++] = (Position - obj.Position).Length();
 			}
 		}
 		chosenMove = (double[]) neuralNetwork.Call("getOutput", nn, input);
 		double[] target = SelectTarget(input);
-		// chosenMove[0] = 1;
-		// chosenMove[1] = 0;
-		// double[] target = {1,0};
-		// chosenMove[0] = 1;
-		// chosenMove[1] = 1;
-		// Rotation = (float)Math.PI/2;
 		Vector2 targetDirection = new Vector2(0, (float)-target[0] * maxSpeed).Rotated((float)((target[1] -.5)*turningRate));
 		Vector2 choiceDirection = new Vector2(0, (float)-chosenMove[0] * maxSpeed).Rotated((float)( (chosenMove[1] -.5)*turningRate));
 		debugTarget.RemovePoint(1);
 		debugChoice.RemovePoint(1);
 		debugTarget.AddPoint(targetDirection*15);
 		debugChoice.AddPoint(choiceDirection*15);
-		// debugTarget.AddPoint(new Vector2((float)target[0], (float)target[1])*50);
-		// debugChoice.AddPoint(new Vector2((float)chosenMove[0], (float)chosenMove[1])*50);
-		// GD.Print(new Vector2((float)target[0], (float)target[1]));
-		// GD.Print(new Vector2((float)chosenMove[0], (float)chosenMove[1]));
-		// GD.Print();
-		// if(target[0] == .5 && Pyth(chosenMove[0] -.5,chosenMove[1]) < .1){}
-		// else
-		// neuralNetwork.Call("train", nn, input, target);
 	}
 	static double Pyth(double a, double b){
 		return Math.Sqrt((a*a)+ (b*b));

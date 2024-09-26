@@ -11,8 +11,8 @@ public partial class main : Node2D
 	}
 
 	static readonly PackedScene preyScene = GD.Load<PackedScene>("res://Creatures/prey.tscn");
-		static readonly PackedScene predatorScene = GD.Load<PackedScene>("res://Creatures/predator.tscn");
-	static readonly PackedScene grassScene = GD.Load<PackedScene>("res://Creatures/food.tscn");
+	static readonly PackedScene predatorScene = GD.Load<PackedScene>("res://Creatures/predator.tscn");
+	static public readonly PackedScene grassScene = GD.Load<PackedScene>("res://Creatures/food.tscn");
 	
 	static bool mouse_down = false;
 	static Vector2 last_placement;

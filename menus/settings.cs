@@ -3,9 +3,13 @@ using System;
 
 public partial class settings : Control
 {
+	int oldRayCount = 5;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		oldRayCount = GlobalVariables.Instance.rayCount;
+		SpinBox rayBox = (SpinBox)GetNode("Panel/GridContainer/SpinBox2");
+		rayBox.Value = GlobalVariables.Instance.rayCount;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -14,7 +18,9 @@ public partial class settings : Control
 	}
 	private void _on_back_pressed()
 	{
-	GetTree().ChangeSceneToFile("res://menus/main_menu.tscn");
+		GetTree().ChangeSceneToFile("res://menus/main_menu.tscn");
+		if(GlobalVariables.Instance.rayCount != oldRayCount)
+			Creature.Pretrain();
 	}
 	
 	private void _on_prey_fov_value_changed(int fov){
