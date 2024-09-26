@@ -7,7 +7,7 @@ public abstract partial class Creature : RigidBody2D{
 	// private static int inputSize = 10;
 	private static int maxSpeed = 70;
 	private static float turningRate = 1.5F;
-	public virtual float Fov {get;set;} = .785F;
+	public virtual float Fov {get;set;}
 	private static float sightLength = 100F;
 	public bool eaten = false;
 	public Variant nn;

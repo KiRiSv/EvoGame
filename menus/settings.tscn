@@ -22,17 +22,19 @@ script = ExtResource("1_fo2d7")
 
 [node name="Back" type="Button" parent="."]
 layout_mode = 0
-offset_right = 78.0
-offset_bottom = 37.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 88.0
+offset_bottom = 47.0
 shortcut = SubResource("Shortcut_dljav")
 text = "Back"
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 2
-offset_left = 556.0
-offset_top = 316.0
-offset_right = 994.0
-offset_bottom = 427.0
+offset_left = 741.0
+offset_top = 484.0
+offset_right = 1179.0
+offset_bottom = 595.0
 
 [node name="GridContainer" type="GridContainer" parent="Panel"]
 layout_mode = 0

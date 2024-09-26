@@ -9,7 +9,11 @@ public partial class settings : Control
 	{
 		oldRayCount = GlobalVariables.Instance.rayCount;
 		SpinBox rayBox = (SpinBox)GetNode("Panel/GridContainer/SpinBox2");
+		SpinBox predFovBox = (SpinBox)GetNode("Panel/GridContainer/SpinBox3");
+		SpinBox preyFovBox = (SpinBox)GetNode("Panel/GridContainer/SpinBox");
 		rayBox.Value = GlobalVariables.Instance.rayCount;
+		predFovBox.Value = GlobalVariables.Instance.predFov / Mathf.Pi * 180;;
+		preyFovBox.Value = GlobalVariables.Instance.preyFov / Mathf.Pi * 180;;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

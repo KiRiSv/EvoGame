@@ -3,7 +3,10 @@ using System;
 
 public partial class Prey : Creature
 {
-	public override float Fov {get;set;} = 1.75F;
+	public override float Fov {
+		get{return GlobalVariables.Instance.preyFov;}
+		set{}
+	}
 	static readonly PackedScene preyScene = GD.Load<PackedScene>("res://Creatures/prey.tscn");
 
 	public override double[] SelectTarget(double[] input){
