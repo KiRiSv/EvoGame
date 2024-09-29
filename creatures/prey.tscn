@@ -13,6 +13,10 @@ contact_monitor = true
 max_contacts_reported = 10
 script = ExtResource("1_44y3n")
 
+[node name="StarvingTimer" type="Timer" parent="."]
+wait_time = 15.0
+autostart = true
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_wu5ny")
 
@@ -20,4 +24,9 @@ shape = SubResource("RectangleShape2D_wu5ny")
 scale = Vector2(0.0400056, 0.0400056)
 texture = ExtResource("1_82ld7")
 
+[node name="EatingTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="StarvingTimer" to="." method="_on_starving_timer_timeout"]

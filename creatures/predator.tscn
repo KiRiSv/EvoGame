@@ -22,4 +22,13 @@ shape = SubResource("RectangleShape2D_kglvw")
 scale = Vector2(0.0804632, 0.0800013)
 texture = ExtResource("1_ii7yj")
 
+[node name="EatingTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="StarvingTimer" type="Timer" parent="."]
+wait_time = 15.0
+autostart = true
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="StarvingTimer" to="." method="_on_starving_timer_timeout"]

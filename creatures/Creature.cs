@@ -7,15 +7,18 @@ public abstract partial class Creature : RigidBody2D{
 	// private static int inputSize = 10;
 	private static int maxSpeed = 70;
 	private static float turningRate = 1.5F;
-	public virtual float Fov {get;set;}
+	public abstract float Fov {get;set;}
 	private static float sightLength = 100F;
 	public bool eaten = false;
 	public Variant nn;
 	public static GDScript neuralNetwork = GD.Load<GDScript>("res://Creatures/neuralNet.gd");
 	public static GodotObject neuralNetworkNode = (GodotObject)neuralNetwork.New();
 	private double[] chosenMove = {0,0};
+	bool debug = false;
 	Line2D debugTarget;
 	Line2D debugChoice;
+	public Timer eatingTimer;
+	public Timer starvingTimer;
 	public Polygon2D visionCone;
 	RayCast2D[] rays;
 	public void Clone(Creature parent){
@@ -25,6 +28,7 @@ public abstract partial class Creature : RigidBody2D{
 		File.Delete("Creatures/parent.nn");
 		nn = neuralNetwork.Call("createClone", GlobalVariables.Instance.rayCount);
 		File.Delete("Creatures/clone.nn");
+		eatingTimer.Start();
 	}
 
 	public static void CreateVariance(){
@@ -63,27 +67,31 @@ public abstract partial class Creature : RigidBody2D{
 			rays[i] = ray;
 			AddChild(ray);
 			//Ray visualization 
-			Line2D debugLine = new();
-			debugLine.AddPoint(new Vector2(0,0));
-			debugLine.Width = 2F;
-			debugLine.AddPoint(new Vector2(0,-sightLength).Rotated(startingAngle + (i*raySpread)));
-			AddChild(debugLine);
+			if(debug){
+				Line2D debugLine = new();
+				debugLine.AddPoint(new Vector2(0,0));
+				debugLine.Width = 2F;
+				debugLine.AddPoint(new Vector2(0,-sightLength).Rotated(startingAngle + (i*raySpread)));
+				AddChild(debugLine);
+			}
 		}
 		visionCone.Polygon = nodes;
 		visionCone.Color = new Color(1,1,1,.4F);
 		AddChild(visionCone);
-		debugTarget = new Line2D();
-		debugTarget.AddPoint(new Vector2(0,0));
-		debugTarget.Width = 2F;
-		debugTarget.AddPoint(new Vector2(0,-.5F));
-		debugTarget.DefaultColor = new Color(0,0,1,.5F);
-		AddChild(debugTarget);
-		debugChoice = new Line2D();
-		debugChoice.DefaultColor = new Color(1,0,0,.5F);
-		debugChoice.AddPoint(new Vector2(0,0));
-		debugChoice.Width = 2F;
-		debugChoice.AddPoint(new Vector2(0,-.5F));
-		AddChild(debugChoice);
+		if(debug){
+			debugTarget = new Line2D();
+			debugTarget.AddPoint(new Vector2(0,0));
+			debugTarget.Width = 2F;
+			debugTarget.AddPoint(new Vector2(0,-.5F));
+			debugTarget.DefaultColor = new Color(0,0,1,.5F);
+			AddChild(debugTarget);
+			debugChoice = new Line2D();
+			debugChoice.DefaultColor = new Color(1,0,0,.5F);
+			debugChoice.AddPoint(new Vector2(0,0));
+			debugChoice.Width = 2F;
+			debugChoice.AddPoint(new Vector2(0,-.5F));
+			AddChild(debugChoice);
+		}
 	}
 	public static void Pretrain(){
 		// GD.Print("Pre training");
@@ -216,8 +224,8 @@ public abstract partial class Creature : RigidBody2D{
 		}
 	}
 	public override void _IntegrateForces(PhysicsDirectBodyState2D state){
-		// AngularVelocity = (float)((chosenMove[1] -.5) * turningRate);
-		// LinearVelocity = new Vector2(0, (float)-chosenMove[0] * maxSpeed).Rotated(Rotation);
+		AngularVelocity = (float)((chosenMove[1] -.5) * turningRate);
+		LinearVelocity = new Vector2(0, (float)-chosenMove[0] * maxSpeed).Rotated(Rotation);
 	}
 	public abstract double[] SelectTarget(double[] input);
 	public override void _Process(double delta){
@@ -244,13 +252,15 @@ public abstract partial class Creature : RigidBody2D{
 			}
 		}
 		chosenMove = (double[]) neuralNetwork.Call("getOutput", nn, input);
-		double[] target = SelectTarget(input);
-		Vector2 targetDirection = new Vector2(0, (float)-target[0] * maxSpeed).Rotated((float)((target[1] -.5)*turningRate));
 		Vector2 choiceDirection = new Vector2(0, (float)-chosenMove[0] * maxSpeed).Rotated((float)( (chosenMove[1] -.5)*turningRate));
-		debugTarget.RemovePoint(1);
-		debugChoice.RemovePoint(1);
-		debugTarget.AddPoint(targetDirection*15);
-		debugChoice.AddPoint(choiceDirection*15);
+		double[] target = SelectTarget(input);
+		if(debug){
+			Vector2 targetDirection = new Vector2(0, (float)-target[0] * maxSpeed).Rotated((float)((target[1] -.5)*turningRate));
+			debugTarget.RemovePoint(1);
+			debugChoice.RemovePoint(1);
+			debugTarget.AddPoint(targetDirection*15);
+			debugChoice.AddPoint(choiceDirection*15);
+		}
 	}
 	static double Pyth(double a, double b){
 		return Math.Sqrt((a*a)+ (b*b));

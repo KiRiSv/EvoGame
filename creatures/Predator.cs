@@ -40,10 +40,16 @@ public partial class Predator : Creature
 	}
 	public override void Initialize(){
 		nn = neuralNetwork.Call("createPredator",GlobalVariables.Instance.rayCount);
+		eatingTimer = GetNode<Timer>("EatingTimer");
+		starvingTimer = GetNode<Timer>("StarvingTimer");
 		CreateRays();
 	}
+
+	private void _on_starving_timer_timeout(){
+		CallDeferred("queue_free");
+	}
 	private void _on_body_entered(Node body){
-		if(body is Prey prey && ! prey.eaten){
+		if(eatingTimer.IsStopped() && body is Prey prey && ! prey.eaten){
 			prey.eaten = true;
 			body.CallDeferred("queue_free");
 			Predator predatorInstance = (Predator) predatorScene.Instantiate();
@@ -51,7 +57,8 @@ public partial class Predator : Creature
 			predatorInstance.Position = Position;
 			predatorInstance.Rotation = Rotation;
 			GetParent().CallDeferred("add_child",predatorInstance);
-			//GetParent().AddChild(predatorInstance);
+			eatingTimer.Start();
+			starvingTimer.Start();
 		}
 	}
 }
